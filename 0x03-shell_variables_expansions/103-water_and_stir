@@ -1,2 +1,13 @@
 #!/bin/bash
-printf "%o\n" $(($((5#(echo $WATER | tr water 01234))) + $((5#$(echo $STIR | tr stir. 01234))))) | tr 01234567 bestchol
+# Get the values of the environment variables WATER and STIR
+water="$WATER"
+stir="$STIR"
+# Convert the values from base water and base stir to decimal
+water_dec=$(echo $water | tr 'water' '01' | tr 'rate' '2' | tr 'ew' '3' | tr -d '[:alpha:]')
+stir_dec=$(echo $stir | tr 'stir' '01' | tr 'tr' '2' | tr 'i.' '3' | tr -d '[:alpha:]')
+# Add the decimal values together
+result_dec=$((water_dec + stir_dec))
+# Convert the result to base bestchol
+result_bestchol=$(echo "obase=bestchol; $result_dec" | bc)
+# Print the result
+echo $result_bestchol
